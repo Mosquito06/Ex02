@@ -3,12 +3,54 @@
 <html>
 <head>
 	<title>Home</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script>
+		$(function(){
+			$("#btn1").click(function(){
+				$.ajax({
+					url: "/ex02/json/map",
+					dataType: "json",
+					type: "get",
+					success : function(data){
+						console.log(data);
+					}
+					
+				})
+			})
+			
+			$("#btn2").click(function(){
+				$.ajax({
+					url: "/ex02/json/sendList",
+					dataType: "json",
+					type: "get",
+					success : function(data){
+						console.log(data);
+					}
+					
+				})
+			})
+			
+			$("#btn3").click(function(){
+				$.ajax({
+					url: "/ex02/json/sendMapAuth",
+					dataType: "json",
+					data : {"test": "동환", "test2" : 11},
+					type: "get",
+					success : function(data){
+						console.log(data);
+					}
+					
+				})
+			})
+			
+			
+		})
+	
+	</script>
 </head>
 <body>
-<h1>
-	Hello world!  
-</h1>
-
-<P>  The time on the server is ${serverTime}. </P>
+	<button id="btn1">map test</button>
+	<button id="btn2">list test</button>
+	<button id="btn3">response test</button>
 </body>
 </html>

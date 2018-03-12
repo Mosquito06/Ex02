@@ -3,9 +3,12 @@ package com.dgit.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -55,6 +58,31 @@ public class JSONController {
 		}		
 		
 		return list;
+	}
+	
+	@RequestMapping("sendListAuth")
+	public ResponseEntity<Void> sendListAuth(){
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // 400 에러를 발생시킴
+	}
+	
+	@RequestMapping("sendVOAuth")
+	public ResponseEntity<SampleVO> sendVOAuth(){
+		SampleVO sample = new SampleVO();
+		sample.setMno(1);
+		sample.setFirstName("DongHwan");
+		sample.setLastName("KIM");
+		
+		return new ResponseEntity<SampleVO>(sample, HttpStatus.BAD_REQUEST);
+	}
+	
+	@RequestMapping("sendMapAuth")
+	public ResponseEntity<Map<String, String>> sendMapAuth(String test, int test2){
+		HashMap<String, String> map = new HashMap<>();
+		map.put("key1", test);
+		map.put("key2", test2 + " string");
+		
+		return new ResponseEntity<Map<String, String>>(map, HttpStatus.OK);
+		
 	}
 	
 	
