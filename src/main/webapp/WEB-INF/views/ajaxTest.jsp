@@ -54,10 +54,10 @@
 			})
 		})
 		
-		$("#modifyBtn").click(function(){
-			var rno = $("#rno").val();
-			var replytext = $("#replytext").val();
-			
+		$(document).on("click", ".modifyBtn", function(){
+			var rno = $(this).prev().prev().val();
+			var replytext = $(this).prev().val();
+						
 			var sendDate = {replytext : replytext};
 			
 			$.ajax({
@@ -144,7 +144,7 @@
 </script>
 <script id="temp" type="text/x-handlebars-template">
 {{#list}}	
-<li>댓글번호 : {{rno}} 댓글내용: {{replytext}} <button value='{{rno}}' class='deleteBtn'>삭제</button></li>
+<li'>댓글번호 : <input type='text' value='{{rno}}'> 댓글내용: <input type='text' value='{{replytext}}'> <button value='{{rno}}' class='modifyBtn'>수정</button><button value='{{rno}}' class='deleteBtn'>삭제</button></li><br>
 {{/list}}
 </script>
 </head>
@@ -168,7 +168,6 @@
 			<input type="text" name="replytext" id="replytext">
 		</div>
 		<button id="newReplyBtn">Add Reply</button>
-		<button id="modifyBtn">Modify Reply</button>
 		<button id="listBtn">List Reply</button>
 	</div>
 	<ul id="list">
