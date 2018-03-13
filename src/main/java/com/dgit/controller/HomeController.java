@@ -41,4 +41,9 @@ public class HomeController {
 		return "ajaxTest";
 	}
 	
+	@RequestMapping("/form")
+	public String memberAjax(){
+		return "form";
+	}
+	
 }
