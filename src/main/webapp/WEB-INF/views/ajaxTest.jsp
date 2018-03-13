@@ -6,7 +6,32 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.js"></script>
+<style>
+	.pagination{
+		width: 100%;
+		
+	}
+	
+	.pagination li{
+		list-style: none;
+		float: left;
+		padding: 3px;
+		border: 1px solid blue;
+		margin: 3px;
+	}
+	
+	.pagination a{
+		text-decoration: none;
+		color: black;
+	}
+	
+	.pagination li.active a{
+		color: red;
+	}
+</style>
 <script>
+	var page = 1;
 	$(function(){
 		$("#newReplyBtn").click(function(){
 			var bno = $("#bno").val();
@@ -50,7 +75,7 @@
 		
 		$("#listBtn").click(function(){
 			var bno = $("#bno").val();
-			getList(bno);
+			getList(bno, page);
 			
 		})
 		
@@ -68,28 +93,59 @@
 				}
 				
 			})
-			
-			
+		})
+		
+		// .pagination은 동적으로 추가되는 부분이 아니기 때문에 해당 클래스 내 새로 동적으로 추가되는 태그에 이벤트를 달아주면 됨
+		$(".pagination").on("click", "li a", function(e){
+			e.preventDefault();
+			var bno = $("#bno").val();
+			page = $(this).attr("href");
+			getList(bno, page);
 		})
 	})
 	
-	function getList(bno){
+	function getList(bno, page){
 		$.ajax({
-			url : "/ex02/replies/all/" + bno,
+			url : "/ex02/replies/" + bno + "/" + page,
 			type : "get",
 			dataType : "json",
 			success : function(data){
 				$("#list").empty();
 				
 				console.log(data);
-				$(data).each(function(i, reply){
-					$("#list").append(
-						"<li>" + "댓글번호 : " +reply.rno + " 댓글내용 : " + reply.replytext + "<button value='"+ reply.rno + "' class='deleteBtn'>삭제</button></li>"
-					)
-				})
+				var source = $("#temp").html();
+				var fn = Handlebars.compile(source);
+				$("#list").html(fn(data));
+				printPaging(data.pageMaker);
 			}
 		})
 	}
+	
+	function printPaging(pageMaker){
+		var str = "";
+		if(pageMaker.prev){
+			str += "<li><a href='" + pageMaker.startPage -1 + "'> << </a></li>"
+		}
+		
+		for(var i = pageMaker.startPage; i <= pageMaker.endPage; i++){
+			if(pageMaker.cri.page == i){
+				str += "<li class='active'><a href='" + i + "'>"+ i +"</a></li>"
+			}else{
+				str += "<li><a href='" + i + "'>"+ i +"</a></li>"
+			}
+		}
+				
+		if(pageMaker.next){
+			str += "<li><a href='" + pageMaker.endPage + 1 + "'> >> </a></li>"
+		}
+		
+		$(".pagination").html(str);
+	}
+</script>
+<script id="temp" type="text/x-handlebars-template">
+{{#list}}	
+<li>댓글번호 : {{rno}} 댓글내용: {{replytext}} <button value='{{rno}}' class='deleteBtn'>삭제</button></li>
+{{/list}}
 </script>
 </head>
 <body>
@@ -116,6 +172,9 @@
 		<button id="listBtn">List Reply</button>
 	</div>
 	<ul id="list">
+	</ul>
+	<ul class="pagination">
+		
 	</ul>
 </body>
 </html>

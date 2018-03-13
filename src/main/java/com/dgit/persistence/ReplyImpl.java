@@ -1,11 +1,13 @@
 package com.dgit.persistence;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.dgit.domain.Criteria;
 import com.dgit.domain.ReplyVO;
 
 @Repository
@@ -37,6 +39,20 @@ public class ReplyImpl implements ReplyDao {
 	public void delete(int rno) throws Exception {
 		sqlSession.delete(NAMESPACE + ".delete", rno);
 
+	}
+
+	@Override
+	public List<ReplyVO> listPage(int bno, Criteria cri) throws Exception {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("bno", bno);
+		map.put("cri", cri);
+		
+		return sqlSession.selectList(NAMESPACE + ".listPage", map);
+	}
+
+	@Override
+	public int countReply(int bno) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + ".count", bno);
 	}
 
 }
