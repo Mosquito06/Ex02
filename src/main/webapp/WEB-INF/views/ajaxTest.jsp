@@ -49,6 +49,7 @@
 				success : function(result){
 					console.log(result);
 					alert(result);
+					getList(bno, page);
 				}
 				
 			})
@@ -89,7 +90,7 @@
 				type : "delete",
 				dataType : "text",
 				success : function(result){
-					getList(bno);
+					getList(bno, page);
 				}
 				
 			})
